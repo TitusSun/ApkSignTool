@@ -25,8 +25,9 @@ public class ZipUtils {
 	public static boolean removeDirFromZipArchive(String file, String removeDir) throws ZipException {
 		try {
 			// 创建ZipFile并设置编码
-			net.lingala.zip4j.core.ZipFile zipFile = new net.lingala.zip4j.core.ZipFile(file);
-			zipFile.setFileNameCharset("utf-8");// 字符集根据环境更换
+			net.lingala.zip4j.ZipFile zipFile = new net.lingala.zip4j.ZipFile(file);
+			//zipFile.setFileNameCharset("utf-8");// 字符集根据环境更换
+			//zipFile.setCharset("utf-8");
 			removeDir += "/"; // !!!!!!!!!!!!!!!!!!!!!!
 			// 遍历压缩文件中所有的FileHeader, 将指定删除目录下的子文件名保存起来
 			@SuppressWarnings("unchecked")

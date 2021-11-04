@@ -23,7 +23,7 @@ public class SignLogJPanel {
 	
 	public JComponent getContentComponent() {
 		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(null, "操作日志", TitledBorder.LEFT, TitledBorder.TOP, null, Color.BLACK));
+		panel_2.setBorder(new TitledBorder(null, "Logs", TitledBorder.LEFT, TitledBorder.TOP, null, Color.BLACK));
 		panel_2.setBounds(10, 296, 483, 200);
 		panel_2.setLayout(null);
 		

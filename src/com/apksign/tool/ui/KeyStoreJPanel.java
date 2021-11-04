@@ -30,7 +30,7 @@ public class KeyStoreJPanel {
 
 	public JComponent getContentJComponent() {
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "签名文件", TitledBorder.LEFT,
+		panel_1.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Signature File", TitledBorder.LEFT,
 				TitledBorder.TOP, null, Color.BLACK));
 		panel_1.setBounds(10, 100, 483, 187);
 		panel_1.setLayout(null);
@@ -41,19 +41,19 @@ public class KeyStoreJPanel {
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
 
-		JButton button = new JButton("选择签名文件");
+		JButton button = new JButton("Select Signature");
 		button.setBounds(339, 31, 119, 21);
 		panel_1.add(button);
 
-		JLabel label = new JLabel("文件：");
+		JLabel label = new JLabel("File：");
 		label.setBounds(20, 34, 71, 15);
 		panel_1.add(label);
 
-		JLabel label_1 = new JLabel("密码：");
+		JLabel label_1 = new JLabel("Password：");
 		label_1.setBounds(20, 65, 71, 15);
 		panel_1.add(label_1);
 
-		JLabel label_2 = new JLabel("别名：");
+		JLabel label_2 = new JLabel("Alias：");
 		label_2.setBounds(20, 96, 71, 15);
 		panel_1.add(label_2);
 
@@ -74,15 +74,15 @@ public class KeyStoreJPanel {
 		panel_1.add(panel);
 		panel.setLayout(null);
 
-		chckbxV2 = new JCheckBox(" V2签名");
+		chckbxV2 = new JCheckBox(" V2");
 		chckbxV2.setBounds(93, 6, 77, 23);
 		panel.add(chckbxV2);
 
-		chckbxV1 = new JCheckBox(" V1签名");
+		chckbxV1 = new JCheckBox(" V1");
 		chckbxV1.setBounds(0, 6, 77, 23);
 		panel.add(chckbxV1);
 		
-		chckbxV3 = new JCheckBox(" Zip对齐");
+		chckbxV3 = new JCheckBox(" Zip align");
 		chckbxV3.setBounds(186, 6, 77, 23);
 		panel.add(chckbxV3);
 		chckbxV3.setSelected(true);
@@ -103,7 +103,7 @@ public class KeyStoreJPanel {
 		JFileChooser jFileChooser = new JFileChooser();
 		// 这里注意addChoosableFileFilter和setFileFilter的区别 前者是在原来的过滤器中添加
 		// 后者是直接指定唯一的过滤器
-		jFileChooser.setFileFilter(new FileNameExtensionFilter("签名文件", new String[] { "keystore", "jks" }));
+		jFileChooser.setFileFilter(new FileNameExtensionFilter("Signature File", new String[] { "keystore", "jks" }));
 		int result = jFileChooser.showOpenDialog(null);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
@@ -111,7 +111,7 @@ public class KeyStoreJPanel {
 			String formatStr = getFileFormat(filePath);
 
 			if (!formatStr.equals("keystore") && !formatStr.equals("keystore")) {
-				JOptionPane.showMessageDialog(null, "文件格式错误", "警告", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "File format error", "Warning", JOptionPane.WARNING_MESSAGE);
 				return "";
 			}
 
@@ -125,7 +125,7 @@ public class KeyStoreJPanel {
 			ALog.debug("取消文件选择");
 		} else if (result == JFileChooser.ERROR_OPTION) {
 			ALog.debug("选择文件出错");
-			JOptionPane.showMessageDialog(null, "文件格式错误", "警告", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "File format error", "Warning", JOptionPane.WARNING_MESSAGE);
 		}
 
 		return filePath;

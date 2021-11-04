@@ -30,7 +30,7 @@ public class ApkPathJPanal {
 		panel.setBounds(10, 10, 483, 81);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("文件：");
+		JLabel lblNewLabel = new JLabel("File：");
 		lblNewLabel.setBounds(20, 34, 54, 15);
 		panel.add(lblNewLabel);
 		
@@ -40,7 +40,7 @@ public class ApkPathJPanal {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("选择APK文件");
+		JButton btnNewButton_1 = new JButton("Select APK File");
 		btnNewButton_1.setBounds(339, 31, 119, 21);
 		panel.add(btnNewButton_1);
 		
@@ -58,7 +58,7 @@ public class ApkPathJPanal {
 		JFileChooser jFileChooser = new JFileChooser();
 		// 这里注意addChoosableFileFilter和setFileFilter的区别 前者是在原来的过滤器中添加
 		// 后者是直接指定唯一的过滤器
-		jFileChooser.setFileFilter(new FileNameExtensionFilter("apk文件", new String[] { "apk" }));
+		jFileChooser.setFileFilter(new FileNameExtensionFilter("apk File", new String[] { "apk" }));
 		int result = jFileChooser.showOpenDialog(null);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
@@ -66,7 +66,7 @@ public class ApkPathJPanal {
 			String formatStr = AUtils.getFileFormat(filePath);
 
 			if (!formatStr.equals("apk")) {
-				JOptionPane.showMessageDialog(null, "文件格式错误", "警告", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "File format error", "Warning", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
@@ -80,7 +80,7 @@ public class ApkPathJPanal {
 			ALog.debug("取消文件选择");
 		} else if (result == JFileChooser.ERROR_OPTION) {
 			ALog.debug("选择文件出错");
-			JOptionPane.showMessageDialog(null, "文件格式错误", "警告", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "File format error", "Warning", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	

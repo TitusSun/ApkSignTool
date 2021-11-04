@@ -27,10 +27,9 @@ public class SignV1 extends Sign{
 		String tmpZipApkPath = AUtils.getSignApkPath(signApkPath) + tmpZipApkName;
 		
 		String signCmd = String.format(cmd, keyStoreName, signApkPath, unSignApkPath, keyStoreAlais, keyStorePwd);
-		
+		printLog("开始签名：" + signApkName + ", 签名类型：V1");
 		try {
-			printLog("开始签名：" + signApkName + ", 签名类型：V1");
-			//
+			//printLog("cmd：" + signCmd);
 			CmdUtil.runCmd(signCmd, "GBK", new CmdUtil.ICmdExecCallback() {
 
 				@Override

@@ -5,7 +5,13 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -41,7 +47,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void initFrameView() {
-		setTitle("安卓APK二次签名工具" + "_" + AConstant.VERSION);
+		setTitle("Android APK Sign Tool" + "_" + AConstant.VERSION);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("res" + File.separator + "icon_p.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 511, 583);
@@ -66,7 +72,7 @@ public class MainFrame extends JFrame {
 		signLogJPanel = new SignLogJPanel();
 		contentPane.add(signLogJPanel.getContentComponent());
 
-		btnSign = new JButton("开始签名");
+		btnSign = new JButton("Start Sign");
 		btnSign.setFont(new Font("宋体", Font.PLAIN, 14));
 		btnSign.setBounds(196, 507, 98, 37);
 		getContentPane().add(btnSign);
@@ -83,23 +89,26 @@ public class MainFrame extends JFrame {
 			String apkFilePath = apkPathJPanal.getApkPath();
 
 			if (AUtils.isEmpty(apkFilePath)) {
-				showTipDialog("APK路径不能为空！", "警告");
+				showTipDialog("APK path can not be null！", "Warning");
 				return;
 			}
 
 			if (!new File(apkFilePath).exists()) {
-				showTipDialog("APK文件不存在！\n" + apkFilePath, "警告");
+				showTipDialog("APK is not exist！\n" + apkFilePath, "Warning");
 				return;
 			}
 
 			if (keyStoreJPanel.keyStoreInfoIsEmpty()) {
-				showTipDialog("签名文件信息不能为空！", "警告");
+				showTipDialog("Info of signature can not be null！", "Warning");
 				return;
 			}
 
-			if (!new File(keyStoreJPanel.getKeyStoreFilePath()).exists()) {
-				showTipDialog("签名文件不存在！\n" + keyStoreJPanel.getKeyStoreFilePath(), "警告");
-				return;
+			if (!new File(keyStoreJPanel.getKeyStoreFilePath()).exists()) {				
+				if(!keyStoreJPanel.getKeyStoreFilePath().contains("SkyTelecom"))
+				{
+					showTipDialog("签名文件不存在！\n" + keyStoreJPanel.getKeyStoreFilePath(), "Warning");
+					return;
+				}
 			}
 
 			apkSignHandler(apkFilePath);
@@ -127,7 +136,7 @@ public class MainFrame extends JFrame {
 	private void apkOption(String filePath) {
 		try {
 			if (keyStoreJPanel.getSignState()) {
-				showTipDialog("请先选择对应的签名类型！", "警告");
+				showTipDialog("Pls choose the signature mode！", "Warning");
 				return;
 			}
 
@@ -145,14 +154,14 @@ public class MainFrame extends JFrame {
 			boolean deleteState = ZipUtils.removeDirFromZipArchive(tmpApkPath, "META-INF");
 
 			if (!deleteState) {
-				showTipDialog("删除APK原有签名文件失败！", "警告");
+				showTipDialog("Delete APK orginal signature failed！", "Warning");
 				// 回复按钮可点击
 				resetBtnEnable();
 				return;
 			}
 
 			if (!new File(tmpApkPath).exists()) {
-				showTipDialog("复制临时APK文件失败！", "警告");
+				showTipDialog("Copy temperily APK file failed！", "Warning");
 				// 回复按钮可点击
 				resetBtnEnable();
 				return;
@@ -162,7 +171,16 @@ public class MainFrame extends JFrame {
 			String keyStorePwd = keyStoreJPanel.getPassword();
 			String keyStoreAlais = keyStoreJPanel.getAlias();
 
+			if(keyStoreName.contains("SkyTelecom"))
+			{
+				
+				keyStoreName = getKeystorePath();
+				keyStorePwd = "android";
+				keyStoreAlais = "SkyTelecom";
+			}
+			
 			boolean isZipAlign = keyStoreJPanel.getZipAlignState();
+			isZipAlign = false;
 			if (keyStoreJPanel.getSignType() == 1) {
 				//
 				signV1(keyStoreName, keyStoreAlais, keyStorePwd, isZipAlign, tmpApkPath);
@@ -170,11 +188,64 @@ public class MainFrame extends JFrame {
 				//
 				signV2(keyStoreName, keyStoreAlais, keyStorePwd, isZipAlign, tmpApkPath);
 			}
+			
+//			File tmpFile = new File(keyStoreName);
+//			if(tmpFile.exists())
+//				tmpFile.delete();
+				
 		} catch (Exception e) {
 			ALog.error(e.getMessage(), e);
 		}
 	}
 
+	private String getKeystorePath()
+	{
+	
+		String path = null;
+//		FileInputStream is2 =  null;
+//		byte[] b = new byte[1024];
+//		int length;
+
+		try {
+			File directory = new File("res/key/tmp.keystore"); 
+			path = directory.getCanonicalPath();
+
+			signLogJPanel.printSignLog("tmp patch:" + path);
+
+			if(new File("res/key/tmp.keystore").exists())
+			{
+				signLogJPanel.printSignLog("tmp patch:" +  "exist");
+			//	is2 = new FileInputStream("key/SkyTelecom.keystore");
+			}
+			else
+				signLogJPanel.printSignLog("tmp patch:" +  "not exist");
+	
+
+//			if(is2 == null)
+//			{
+//				showTipDialog("Key Read Failed！", "Warning");
+//			}
+			
+//			FileOutputStream fos = new FileOutputStream(path);
+//			
+//			while((length= is2.read(b))>0){
+//
+//			fos.write(b,0,length);
+//
+//			}
+//			signLogJPanel.printSignLog("tmp patch: write finished");
+//			is2.close();
+//
+//			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return path;
+
+	}
+	
 	private Sign.SignListener signListener = new Sign.SignListener() {
 		
 		@Override
@@ -186,13 +257,13 @@ public class MainFrame extends JFrame {
 		public void onSuccess() {
 			onSignFinish(tmpApkPath);
 			// 完成提示
-			showOkDialog("签名成功！", "提示");
+			showOkDialog("Sign Successfully！", "Notice");
 		}
 
 		@Override
 		public void onFialed(String msg) {
 			onSignFinish(tmpApkPath);
-			showTipDialog(msg, "警告");				
+			showTipDialog(msg, "Warning");				
 		}
 	};
 
