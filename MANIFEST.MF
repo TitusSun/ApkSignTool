@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.apksign.tool.ApkSignTool
+Class-Path: . libs_zip/zip4j-2.9.0.jar
+Created-By: TitusSun
